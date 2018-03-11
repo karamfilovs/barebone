@@ -1,2 +1,4 @@
-# barebone
-Project agnostic cucumber framework to be cloned
+Barebone project to be extended for specific needs
+Enjoy!
+
+Pragmatic Team
