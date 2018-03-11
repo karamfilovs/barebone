@@ -22,12 +22,12 @@ import java.util.concurrent.TimeUnit;
 public class StepDefinitions {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepDefinitions.class);
     //Drivers location
-    private static final String chromeDriverLocation = "C:\\webdrivers\\chromedriver.exe";
-    private static final String firefoxDriverLocation = "C:\\webdrivers\\geckodriver.exe";
-    private static final String ieDriverLocation = "C:\\webdrivers\\IEDriverServer.exe";
-    private static final String chromeProperty = "webdriver.chrome.driver";
-    private static final String firefoxProperty = "webdriver.gecko.driver";
-    private static final String ieProperty = "webdriver.ie.driver";
+    private static final String CHROME_DRIVER_LOCATION = "C:\\webdrivers\\chromedriver.exe";
+    private static final String FIREFOX_DRIVER_LOCATION = "C:\\webdrivers\\geckodriver.exe";
+    private static final String IE_DRIVER_LOCATION = "C:\\webdrivers\\IEDriverServer.exe";
+    private static final String CHROME_PROPERTY = "webdriver.chrome.driver";
+    private static final String FIREFOX_PROPERTY = "webdriver.gecko.driver";
+    private static final String IE_PROPERTY = "webdriver.ie.driver";
     //Driver
     WebDriver driver;
     private Page page;
@@ -35,17 +35,17 @@ public class StepDefinitions {
 
     private void startBrowser(String browser) {
         if (browser.equalsIgnoreCase("firefox")) {
-            System.setProperty(firefoxProperty, firefoxDriverLocation);
+            System.setProperty(FIREFOX_PROPERTY, FIREFOX_DRIVER_LOCATION);
             driver = new FirefoxDriver();
             configureBrowser(browser);
         }
         if (browser.equalsIgnoreCase("chrome")) {
-            System.setProperty(chromeProperty, chromeDriverLocation);
+            System.setProperty(CHROME_PROPERTY, CHROME_DRIVER_LOCATION);
             driver = new ChromeDriver();
             configureBrowser(browser);
         }
         if (browser.equalsIgnoreCase("ie")) {
-            System.setProperty(ieProperty, ieDriverLocation);
+            System.setProperty(IE_PROPERTY, IE_DRIVER_LOCATION);
             driver = new InternetExplorerDriver();
             configureBrowser(browser);
         }
