@@ -1,11 +1,15 @@
 package definitions;
 
+import cucumber.api.PendingException;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.commons.io.FileUtils;
+import org.fest.assertions.Assertions;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +18,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pages.Page;
+import pages.LoginPage;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -22,15 +26,15 @@ import java.util.concurrent.TimeUnit;
 public class StepDefinitions {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepDefinitions.class);
     //Drivers location
-    private static final String CHROME_DRIVER_LOCATION = "C:\\webdrivers\\chromedriver.exe";
-    private static final String FIREFOX_DRIVER_LOCATION = "C:\\webdrivers\\geckodriver.exe";
-    private static final String IE_DRIVER_LOCATION = "C:\\webdrivers\\IEDriverServer.exe";
+    private static final String CHROME_DRIVER_LOCATION = "E:\\webdrivers\\chromedriver.exe";
+    private static final String FIREFOX_DRIVER_LOCATION = "E:\\webdrivers\\geckodriver.exe";
+    private static final String IE_DRIVER_LOCATION = "E:\\webdrivers\\IEDriverServer.exe";
     private static final String CHROME_PROPERTY = "webdriver.chrome.driver";
     private static final String FIREFOX_PROPERTY = "webdriver.gecko.driver";
     private static final String IE_PROPERTY = "webdriver.ie.driver";
     //Driver
     WebDriver driver;
-    private Page page;
+    private LoginPage loginPage;
 
 
     private void startBrowser(String browser) {
@@ -82,28 +86,59 @@ public class StepDefinitions {
         driver.quit();
     }
 
-    @When("^I search for text:\"(.*)\"$")
-    public void iSearchText(String text) {
-        page.search(text);
-    }
 
-    @Given("^I hit enter from the keyboard$")
-    public void hitKeyboardEnter() {
-        page.hitEnter();
-    }
-
-    @Given("^posts should be visible$")
-    public void postsShouldBeVisible() {
-        page.verifyPostContainerDisplayed();
-    }
-
-
-    @Given("^user is at home page$")
+    @Given("^I am at the Login page$")
     public void openHomePage() {
-        page = new Page(driver);
-        page.gotoPage();
+        loginPage = new LoginPage(driver);
+        loginPage.gotoLoginPage();
     }
 
 
+    @When("^I enter username \"([^\"]*)\"$")
+    public void iEnterUsername(String username) {
+        loginPage.enterUsername(username);
 
+    }
+
+    @When("^I enter password \"([^\"]*)\"$")
+    public void iEnterPassword(String password) {
+        loginPage.enterPassword(password);
+
+    }
+
+    @And("^I press Login button$")
+    public void iPressLoginButton() {
+        loginPage.pressLoginButton();
+
+    }
+
+    @Then("^error message \"([^\"]*)\" should be displayed$")
+    public void errorMessageShouldBeDisplayed(String errorMessage) {
+        Assertions.assertThat(loginPage.getContentContainerText()).as("Bad Login Message").containsIgnoringCase(errorMessage);
+    }
+
+    @And("^logout icon should not be displayed$")
+    public void logoutIconShouldNotBeDisplayed() {
+        Assertions.assertThat(loginPage.isLogoutDisplayed()).as("Logout Displayed").isFalse();
+    }
+
+    @Then("^login form table should contain text \"([^\"]*)\"$")
+    public void loginFormShouldContainText(String text) throws Throwable {
+        Assertions.assertThat(loginPage.getLoginFormText()).as("Login Note").containsIgnoringCase(text);
+    }
+
+    @When("^I click on lin with text \"([^\"]*)\"$")
+    public void iClickOnLinWithText(String text) throws Throwable {
+        loginPage.clickLinkByText(text);
+    }
+
+    @When("^I switch language to German$")
+    public void iSwitchLanguageToGerman() {
+        loginPage.switchToGerman();
+    }
+
+    @When("^I switch language to English")
+    public void iSwitchLanguageToEnglish() {
+        loginPage.switchToEnglish();
+    }
 }
